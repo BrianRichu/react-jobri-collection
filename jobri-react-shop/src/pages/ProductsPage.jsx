@@ -1,4 +1,5 @@
-import { useState } from "react"
+
+import { useState, useEffect } from "react"
 import { products } from "../../data/products"
 import { Link } from "react-router"
 import { Footer } from "../shared-components/Footer"
@@ -7,6 +8,47 @@ import './ProductsPage.css'
 
 export function ProductsPage(){
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+   const [currentPage , setCurrentPage] = useState(1);
+   const recordsPerPage = 16;
+   const lastIndex = currentPage * recordsPerPage;
+   const firstIndex = lastIndex - recordsPerPage;
+   const records = products.slice(firstIndex , lastIndex);
+   const npage = Math.ceil(products.length / recordsPerPage);
+   const numbers = [...Array(npage).keys()].map(i => i + 1);
+
+   // Load current page from localStorage on component mount
+   useEffect(() => {
+     const savedPage = localStorage.getItem('productsPage');
+     if (savedPage) {
+       const pageNum = parseInt(savedPage, 10);
+       if (pageNum >= 1 && pageNum <= npage) {
+         setCurrentPage(pageNum);
+       }
+     }
+   }, [npage]);
+
+   // Function to update current page and save to localStorage
+   const updateCurrentPage = (page) => {
+     setCurrentPage(page);
+     localStorage.setItem('productsPage', page.toString());
+   };
+
+   function prePage(){
+     if(currentPage !== 1){
+       updateCurrentPage(currentPage - 1);
+     }
+   }
+
+   function changeCPage(id){
+     updateCurrentPage(id);
+   }
+
+   function nextPage(){
+     if(currentPage !== npage){
+       updateCurrentPage(currentPage + 1);
+     }
+   }
+
 
   return(
     <>
@@ -91,7 +133,7 @@ export function ProductsPage(){
 {/* PRODUCTS */}
 <div className="top-products js-top-products">
 
-{products.map((product)=>{
+{records.map((product)=>{
   return (
     <div key={product.id} className="top-product">
       <Link to={`/product-detail/${product.id}`}>
@@ -105,10 +147,33 @@ export function ProductsPage(){
         >
           Add to Cart
         </button>
+    <nav>
+      
+    </nav>
+
       </div>
   )
 })}
 </div>
+
+{/* PAGINATION */}
+<nav className="pagination">
+  <ul className="pagination-list">
+    <li className="page-item">
+      <a href="#" className="page-link" onClick={prePage}>Prev</a>
+    </li>
+    {
+      numbers.map((n, i) => (
+        <li key={i} className={`page-item ${currentPage === n ? 'active' : ''}`}>
+          <a href="#" className="page-link" onClick={() => changeCPage(n)}>{n}</a>
+        </li>
+      ))
+    }
+    <li className="page-item">
+      <a href="#" className="page-link" onClick={nextPage}>Next</a>
+    </li>
+  </ul>
+</nav>
 
 <Footer />
 

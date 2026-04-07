@@ -158,8 +158,44 @@ body {
   cursor: pointer;
 }
 .add-cart-button:active{
-  background-color: var(--brown-accent);
+  background-color: var(--accent);
   transition: 0.1s ease-in-out;
+}
+
+/* ================= PAGINATION ================= */
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin: 40px 0;
+}
+
+.pagination-list {
+  list-style: none;
+  display: flex;
+  gap: 8px;
+}
+
+.page-link {
+  display: block;
+  padding: 8px 12px;
+  text-decoration: none;
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: #fff;
+  transition: background 0.2s;
+}
+
+.page-link:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+.page-item.active .page-link {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
 }
 
 /* ================= RESPONSIVE ================= */
