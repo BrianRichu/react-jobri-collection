@@ -5,6 +5,7 @@ import { Link } from "react-router"
 import { Footer } from "../shared-components/Footer"
 import { Whatsapp } from "../shared-components/Whatsapp"
 import './ProductsPage.css'
+import { ScrollToTop } from "../shared-components/ScrollToTop"
 
 export function ProductsPage(){
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -52,6 +53,7 @@ export function ProductsPage(){
 
   return(
     <>
+    <ScrollToTop />
     <header className="site-header">
   <div className="nav-wrapper">
 

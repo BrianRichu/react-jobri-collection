@@ -3,6 +3,7 @@ import { products } from "../../data/products"
 import { Whatsapp } from "../shared-components/Whatsapp"
 import { Footer } from "../shared-components/Footer"
 import './ProductDetail.css'
+import { ScrollToTop } from "../shared-components/ScrollToTop"
 
 export function ProductDetail() {
   const { id } = useParams()
@@ -19,6 +20,7 @@ export function ProductDetail() {
 
   return (
     <>
+    <ScrollToTop />
       <header className="site-header js-header">
         <div className="nav-wrapper">
           {/* LOGO */}

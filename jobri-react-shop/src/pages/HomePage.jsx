@@ -3,9 +3,11 @@ import { Whatsapp } from "../shared-components/Whatsapp";
 import { Link } from "react-router";
 import "./HomePage.css";
 
+
 export function HomePage() {
   return (
     <>
+
       <header className="site-header">
         <div className="nav-wrapper">
           {/* LOGO */}
