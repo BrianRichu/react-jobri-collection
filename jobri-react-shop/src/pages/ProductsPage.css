@@ -162,6 +162,32 @@ body {
   transition: 0.1s ease-in-out;
 }
 
+/* ================= NO RESULTS ================= */
+
+.no-results {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text);
+}
+
+.no-results p {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.clear-search {
+  background: none;
+  border: none;
+  color: var(--primary);
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: inherit;
+}
+
+.clear-search:hover {
+  color: var(--accent);
+}
+
 /* ================= PAGINATION ================= */
 
 .pagination {

@@ -9,29 +9,58 @@ import { ScrollToTop } from "../shared-components/ScrollToTop"
 
 export function ProductsPage(){
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-   const [currentPage , setCurrentPage] = useState(1);
    const recordsPerPage = 16;
+
+   const [searchTerm, setSearchTerm] = useState(() => {
+     return localStorage.getItem('productsSearch') || '';
+   });
+
+   const [currentPage, setCurrentPage] = useState(() => {
+     const savedSearch = localStorage.getItem('productsSearch') || '';
+     const savedPage = localStorage.getItem('productsPage');
+     if (savedPage && !savedSearch) {
+       const pageNum = parseInt(savedPage, 10);
+       const totalPages = Math.ceil(products.length / recordsPerPage);
+       return pageNum >= 1 && pageNum <= totalPages ? pageNum : 1;
+     }
+     return 1;
+   });
+
+   // Filter products based on search term
+   const filteredProducts = products.filter(product => {
+     const term = searchTerm.toLowerCase();
+     const nameMatch = product.name.toLowerCase().includes(term);
+     const keywordsMatch = Array.isArray(product.keywords) &&
+       product.keywords.some(keyword =>
+         keyword.toLowerCase().includes(term)
+       );
+     return nameMatch || keywordsMatch;
+   });
+
    const lastIndex = currentPage * recordsPerPage;
    const firstIndex = lastIndex - recordsPerPage;
-   const records = products.slice(firstIndex , lastIndex);
-   const npage = Math.ceil(products.length / recordsPerPage);
+   const records = filteredProducts.slice(firstIndex , lastIndex);
+   const npage = Math.ceil(filteredProducts.length / recordsPerPage);
    const numbers = [...Array(npage).keys()].map(i => i + 1);
 
-   // Load current page from localStorage on component mount
+   // Scroll to top when pagination changes
    useEffect(() => {
-     const savedPage = localStorage.getItem('productsPage');
-     if (savedPage) {
-       const pageNum = parseInt(savedPage, 10);
-       if (pageNum >= 1 && pageNum <= npage) {
-         setCurrentPage(pageNum);
-       }
-     }
-   }, [npage]);
+     window.scrollTo(0, 0);
+   }, [currentPage]);
 
    // Function to update current page and save to localStorage
    const updateCurrentPage = (page) => {
      setCurrentPage(page);
      localStorage.setItem('productsPage', page.toString());
+   };
+
+   // Function to handle search input changes
+   const handleSearchChange = (e) => {
+     const value = e.target.value;
+     setSearchTerm(value);
+     localStorage.setItem('productsSearch', value);
+     setCurrentPage(1); // Reset to first page when searching
+     localStorage.setItem('productsPage', '1');
    };
 
    function prePage(){
@@ -66,7 +95,13 @@ export function ProductsPage(){
 
     {/* SEARCH */}
     <div className="nav-middle">
-      <input type="search" placeholder="Search products..." id="search-input" />
+      <input 
+        type="search" 
+        placeholder="Search products..." 
+        id="search-input" 
+        value={searchTerm}
+        onChange={handleSearchChange}
+      />
       <i className="fa-solid fa-magnifying-glass"></i>
     </div>
 
@@ -130,52 +165,62 @@ export function ProductsPage(){
 </aside>
 
 {/* HEADING */}
-<h1 className="discover">Quality & Affordable Items</h1>
+<h1 className="discover">
+  {searchTerm ? `Search results for "${searchTerm}" (${filteredProducts.length} items)` : 'Quality & Affordable Items'}
+</h1>
 
 {/* PRODUCTS */}
 <div className="top-products js-top-products">
-
-{records.map((product)=>{
-  return (
-    <div key={product.id} className="top-product">
-      <Link to={`/product-detail/${product.id}`}>
-        <img src={product.image} loading="lazy" alt={product.name} />
-      </Link>
+{filteredProducts.length === 0 ? (
+  <div className="no-results">
+    <p>No products found for "{searchTerm}"</p>
+    <p>Try searching for something else or <button onClick={() => handleSearchChange({target: {value: ''}})} className="clear-search">clear search</button></p>
+  </div>
+) : (
+  records.map((product)=>{
+    return (
+      <div key={product.id} className="top-product">
+        <Link to={`/product-detail/${product.id}`}>
+          <img src={product.image} loading="lazy" alt={product.name} />
+        </Link>
+          
+          <p className="product-name">{product.name}</p>
+          <p className="product-price">ksh {product.priceShillings}</p>
+          <button 
+            className="add-cart-button js-add-to-cart"
+          >
+            Add to Cart
+          </button>
+      <nav>
         
-        <p className="product-name">{product.name}</p>
-        <p className="product-price">ksh {product.priceShillings}</p>
-        <button 
-          className="add-cart-button js-add-to-cart"
-        >
-          Add to Cart
-        </button>
-    <nav>
-      
-    </nav>
+      </nav>
 
-      </div>
-  )
-})}
+        </div>
+    )
+  })
+)}
 </div>
 
 {/* PAGINATION */}
-<nav className="pagination">
-  <ul className="pagination-list">
-    <li className="page-item">
-      <a href="#" className="page-link" onClick={prePage}>Prev</a>
-    </li>
-    {
-      numbers.map((n, i) => (
-        <li key={i} className={`page-item ${currentPage === n ? 'active' : ''}`}>
-          <a href="#" className="page-link" onClick={() => changeCPage(n)}>{n}</a>
-        </li>
-      ))
-    }
-    <li className="page-item">
-      <a href="#" className="page-link" onClick={nextPage}>Next</a>
-    </li>
-  </ul>
-</nav>
+{filteredProducts.length > 0 && (
+  <nav className="pagination">
+    <ul className="pagination-list">
+      <li className="page-item">
+        <a href="#" className="page-link" onClick={(e) => { e.preventDefault(); prePage(); }}>Prev</a>
+      </li>
+      {
+        numbers.map((n, i) => (
+          <li key={i} className={`page-item ${currentPage === n ? 'active' : ''}`}>
+            <a href="#" className="page-link" onClick={(e) => { e.preventDefault(); changeCPage(n); }}>{n}</a>
+          </li>
+        ))
+      }
+      <li className="page-item">
+        <a href="#" className="page-link" onClick={(e) => { e.preventDefault(); nextPage(); }}>Next</a>
+      </li>
+    </ul>
+  </nav>
+)}
 
 <Footer />
 
