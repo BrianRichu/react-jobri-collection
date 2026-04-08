@@ -18,19 +18,19 @@ export function Footer (){
             <h4>Quick Links</h4>
             <ul>
               <li>
-                <a href="#">Sneakers</a>
+                <a href="/products">Sneakers</a>
               </li>
               <li>
-                <a href="#">Watches</a>
+                <a href="/products">Watches</a>
               </li>
               <li>
-                <a href="#">Clothing</a>
+                <a href="/products">Clothing</a>
               </li>
               <li>
-                <a href="#">Kids</a>
+                <a href="/products">Kids</a>
               </li>
               <li>
-                <a href="products.html" target="_blank">
+                <a href="/products" target="_blank">
                   All Products
                 </a>
               </li>
