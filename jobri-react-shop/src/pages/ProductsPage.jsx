@@ -192,7 +192,6 @@ export function ProductsPage(){
             className="add-cart-button js-add-to-cart"
             onClick={() => {
               addToCart(product.id, 1);
-              alert('Added to cart!');
             }}
           >
             Add to Cart

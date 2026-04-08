@@ -1,12 +1,14 @@
 import { Whatsapp } from "../shared-components/Whatsapp";
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { products } from "../../data/products";
 import { deliveryOptions } from "../../data/deliveryOptions";
 import { useCart } from '../context/CartContext';
 import './CheckoutPage.css'
+import { Footer } from "../shared-components/Footer";
 
 export function CheckoutPage(){
   const { cart, updateQuantity } = useCart();
+  const navigate = useNavigate();
 
   const deliveryOption = deliveryOptions.find(option => option.id === cart[0]?.deliveryOptionId) || deliveryOptions[0];
   const expectedDeliveryDate = new Date(Date.now() + deliveryOption.deliveryDays * 24 * 60 * 60 * 1000)
@@ -19,6 +21,7 @@ export function CheckoutPage(){
 
   const deliveryPrice = deliveryOption.priceShillings;
   const total = subtotal + deliveryPrice;
+
 
   return(
     <>
@@ -97,7 +100,7 @@ export function CheckoutPage(){
                 <div>Order Total:</div>
                 <div className="payment-summary-money">Ksh {total}</div>
               </div>
-              <button className="place-order-button">Place your order</button>
+              <button className="place-order-button" type="button" onClick={() => navigate('/order-redirect')}>Place your order</button>
             </div>
           </div>
         </>
@@ -105,6 +108,8 @@ export function CheckoutPage(){
     </div>
     {/*whatsapp icon section*/}
     <Whatsapp />
+
+    <Footer />
     </>
   )
 }

@@ -1,0 +1,55 @@
+.redirect-page {
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  background-color: #f4f2ef;
+}
+
+.redirect-card {
+  background: white;
+  border-radius: 24px;
+  box-shadow: 0 22px 48px rgba(0, 0, 0, 0.08);
+  padding: 40px 36px;
+  max-width: 520px;
+  width: 100%;
+  text-align: center;
+}
+
+.redirect-card h1 {
+  font-size: 28px;
+  margin-bottom: 16px;
+}
+
+.redirect-card p {
+  color: #4a4a4a;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.back-link,
+.redirect-card a {
+  color: #1f1f1f;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.redirect-card a:hover,
+.back-link:hover {
+  text-decoration: underline;
+}
+
+.loader {
+  width: 50px;
+  height: 50px;
+  margin: 0 auto 18px;
+  border: 6px solid #e6e1dc;
+  border-top-color: #a57f56;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
