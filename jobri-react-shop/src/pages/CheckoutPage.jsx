@@ -5,13 +5,15 @@ import { deliveryOptions } from "../../data/deliveryOptions";
 import { useCart } from '../context/CartContext';
 import './CheckoutPage.css'
 import { Footer } from "../shared-components/Footer";
+import { useState } from 'react';
 
 export function CheckoutPage(){
   const { cart, updateQuantity } = useCart();
   const navigate = useNavigate();
+  const [renderTime] = useState(() => Date.now());
 
   const deliveryOption = deliveryOptions.find(option => option.id === cart[0]?.deliveryOptionId) || deliveryOptions[0];
-  const expectedDeliveryDate = new Date(Date.now() + deliveryOption.deliveryDays * 24 * 60 * 60 * 1000)
+  const expectedDeliveryDate = new Date(renderTime + deliveryOption.deliveryDays * 24 * 60 * 60 * 1000)
     .toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' });
 
   const subtotal = cart.reduce((sum, cartItem) => {
