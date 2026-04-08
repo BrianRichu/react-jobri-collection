@@ -6,9 +6,11 @@ import { Footer } from "../shared-components/Footer"
 import { Whatsapp } from "../shared-components/Whatsapp"
 import './ProductsPage.css'
 import { ScrollToTop } from "../shared-components/ScrollToTop"
+import { useCart } from "../context/CartContext"
 
 export function ProductsPage(){
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const { addToCart } = useCart()
    const recordsPerPage = 16;
 
    const [searchTerm, setSearchTerm] = useState(() => {
@@ -188,6 +190,10 @@ export function ProductsPage(){
           <p className="product-price">ksh {product.priceShillings}</p>
           <button 
             className="add-cart-button js-add-to-cart"
+            onClick={() => {
+              addToCart(product.id, 1);
+              alert('Added to cart!');
+            }}
           >
             Add to Cart
           </button>

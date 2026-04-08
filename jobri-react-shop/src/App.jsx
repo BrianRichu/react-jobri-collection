@@ -3,19 +3,22 @@ import { HomePage } from './pages/HomePage'
 import { ProductsPage } from './pages/ProductsPage'
 import { ProductDetail } from './pages/ProductDetail'
 import './App.css'
+import { CheckoutPage } from './pages/CheckoutPage'
+import { CartProvider } from './context/CartContext'
 
 
 function App() {
   
 
   return (
-    <>
+    <CartProvider>
     <Routes>
       <Route index element = {<HomePage />} />
       <Route path='products' element = {<ProductsPage />} />
+      <Route path = 'checkout' element = {<CheckoutPage />} />
       <Route path='product-detail/:id' element = {<ProductDetail />} />
     </Routes>
-    </>
+    </CartProvider>
   )
 }
 

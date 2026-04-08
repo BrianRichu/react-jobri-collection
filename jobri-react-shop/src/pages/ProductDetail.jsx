@@ -4,10 +4,17 @@ import { Whatsapp } from "../shared-components/Whatsapp"
 import { Footer } from "../shared-components/Footer"
 import './ProductDetail.css'
 import { ScrollToTop } from "../shared-components/ScrollToTop"
+import { useCart } from "../context/CartContext"
 
 export function ProductDetail() {
   const { id } = useParams()
   const product = products.find((item) => item.id === id)
+  const { addToCart } = useCart()
+
+  const handleAddToCart = () => {
+    addToCart(product.id, 1)
+    alert('Added to cart!')
+  }
 
   if (!product) {
     return (
@@ -55,7 +62,7 @@ export function ProductDetail() {
         <div className="product-info">
           <h2 className="product-name">{product.name}</h2>
           <p className="product-price">ksh {product.priceShillings}</p>
-          <button className="add-cart-button js-add-to-cart" type="button">
+          <button className="add-cart-button js-add-to-cart" type="button" onClick={handleAddToCart}>
             Add to Cart
           </button>
           <ul className="product-extra-info">
